@@ -1,1 +1,3 @@
-/libraries/**    -text
+/libraries/**	-text
+
+*.ino	text eol=lf
