@@ -541,7 +541,6 @@ void loop() {
   // Display distance only after reaching the 0cm start mark
   if (inMotion == true && (setCurDist == true)) {
     displayDistance((distance - currDistTravelled));
-    // Serial.println((distance - currDistTravelled));
     displayTime((elapsedTime - currStopTime));
   }
 
