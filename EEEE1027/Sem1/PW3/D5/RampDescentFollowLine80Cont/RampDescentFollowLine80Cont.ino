@@ -370,8 +370,8 @@ void setup() {
 
   lcd.print("Starting run...");  // Print message about starting movement
 
-  delay(500);   // Wait a little before starting to move
-  lcd.clear();  // Clear LCD
+  delay(500);  // Wait a little before starting to move
+  // lcd.clear();  // Clear LCD
   // lcd.setCursor(0, 0);       // Set cursor to the first character of the first row
   // lcd.print("Ramp Angle:");  // Print "Ramp Angle" text on the first line
 
@@ -417,17 +417,34 @@ void loop() {
 
   // Descending the ramp
   if (reachedTop == true && topWaitEnd == true && hasSpun == true && rampDescent == false) {
+    lcd.setCursor(0, 0);
+    lcd.print("                ");
+    lcd.setCursor(0, 0);
+    lcd.print("Descending");
+
     if (minPitch >= RAMP_ANGLE_NEG) {
+      lcd.setCursor(0, 0);
+      lcd.print("                ");
+      lcd.setCursor(0, 0);
+      lcd.print("Descending");
       moveForward(159);  // 62.5% of max power
     }
 
     // is now on the downwards slope of the ramp
     // needs to get to level ground and know its on level ground
     if (minPitch < RAMP_ANGLE_NEG && accel_z <= 10.4) {
+      lcd.setCursor(0, 0);
+      lcd.print("                ");
+      lcd.setCursor(0, 0);
+      lcd.print("Descending");
       moveForward(159);  // 62.5% of max power
     }
 
     if (minPitch < RAMP_ANGLE_NEG && accel_z > 10.4 && pitch > -1.0) {
+      lcd.setCursor(0, 0);
+      lcd.print("                ");
+      lcd.setCursor(0, 0);
+      lcd.print("Descended");
       moveStop();
       // Has descended the ramp
       rampDescent = true;
@@ -438,13 +455,21 @@ void loop() {
   }
   if (rampDescent == true && atStartMark == false && (distance - currDistTravelled) < START_MARK_NUDGE) { moveForward(159); }
   if (rampDescent == true && atStartMark == false && (distance - currDistTravelled) >= START_MARK_NUDGE) {
+    lcd.setCursor(0, 0);
+    lcd.print("                ");
+    lcd.setCursor(0, 0);
+    lcd.print("Nudged");
     currDistTravelled = distance;
     currStopTime = elapsedTime;
     // Set flag to indicate robot is ready to start the line following logic for the rest of the track
-    atStartMark == true;
+    atStartMark = true;
     moveStop();
   }
   if (rampDescent == true && atStartMark == true && setCurDist == false) {
+    lcd.setCursor(0, 1);
+    lcd.print("                ");
+    lcd.setCursor(0, 1);
+    lcd.print("Start Mark");
     moveStop();
     // Make a reference distance measurement to be used to
     // measure the distance the robot travels
@@ -460,7 +485,7 @@ void loop() {
   // Keep following the line after descending the ramp until
   // the robot has travelled 80cm starting from the 0cm start mark
   if (atStartMark == true && setCurDist == true && travelledEighty == false && (distance - currDistTravelled) <= 80) {
-    lineFollowingLogic(127, leftSensor, rightSensor);
+    lineFollowingLogic(108, leftSensor, rightSensor);
   }
   // After the robot has travelled 80cm,
   // stop and wait for 3 seconds,
@@ -472,18 +497,17 @@ void loop() {
   }
 
   if (travelledEighty == true) {
-    lineFollowingLogic(89, leftSensor, rightSensor);
+    lineFollowingLogic(95, leftSensor, rightSensor);
   }
-
 
   // Display the pitch and maximum pitch until the robot completes the 360 degree turn at the top of the ramp
   if (hasSpun == false) {
-    displayAngleMax(pitch, maxPitch);
+    // displayAngleMax(pitch, maxPitch);
   }
   // Display distance only after reaching the 0cm start mark
   if (inMotion == true && (setCurDist == true)) {
-    displayDistance((distance - currDistTravelled));
-    displayTime((elapsedTime - currStopTime));
+    // displayDistance((distance - currDistTravelled));
+    // displayTime((elapsedTime - currStopTime));
   }
 
   delay(LOOP_DELAY);  // Adjust the delay for smoother updates
